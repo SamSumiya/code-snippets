@@ -1,0 +1,16 @@
+# Node.js dependencies
+node_modules/
+
+# Compiled JavaScript output
+dist/
+*.js
+
+# Logs and system files
+*.log
+.DS_Store
+
+# TypeScript build artifacts
+*.tsbuildinfo
+
+# VSCode settings (optional)
+.vscode/
