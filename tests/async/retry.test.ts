@@ -1,8 +1,11 @@
 import { retry } from "../../async/retry"
+
+let setTimeoutSpy: jest.SpyInstance
+
 describe('retry', () => {
     beforeEach(() => {
-        jest.useFakeTimers()
-        // jest.spyOn(retryModule, 'retry')
+        jest.useFakeTimers();
+        setTimeoutSpy = jest.spyOn(global, 'setTimeout');
     })
 
     afterEach(() => {
@@ -93,5 +96,24 @@ describe('retry', () => {
         const fn = () => Promise.reject(new Error('fail'))
 
         await expect( retry(fn, -1, 1000)).rejects.toThrow('fail')
+    })
+
+    it('should retry with correct delay', async () => {
+        let callCount = 0
+        const fn = () => {
+            callCount++ 
+            return callCount <= 2 
+            ? Promise.reject('fail')
+            : Promise.resolve('success')
+        }
+
+        const promise = retry(fn, 3, 500)
+        
+        jest.advanceTimersByTime(1000)
+        await jest.runAllTimersAsync()
+
+        await expect(promise).resolves.toBe('success')
+        expect(setTimeoutSpy).toHaveBeenCalledTimes(2)
+        expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 500)
     })
 })
