@@ -1,4 +1,4 @@
-async function retry<T>(fn: () => Promise<T>, retries: number, delayMS: number): Promise<T> {
+export async function retry<T>(fn: () => Promise<T>, retries: number, delayMS: number): Promise<T> {
 
     return new Promise(( resolve, reject ) => {
         const attempt = (remainingRetries: number) => {
@@ -18,22 +18,22 @@ async function retry<T>(fn: () => Promise<T>, retries: number, delayMS: number):
     })
 }
 
-let count = 0 
+// let count = 0 
 
-const flakyFunction = () => {
-    return new Promise((resolve, reject) => {
-        count++
-        console.log("Attempt", count);
+// export const flakyFunction = () => {
+//     return new Promise((resolve, reject) => {
+//         count++
+//         console.log("Attempt", count);
 
-        if ( count < 3 ) {
-            return reject('❌ Fail')
-        }
+//         if ( count < 3 ) {
+//             return reject('❌ Fail')
+//         }
 
-        resolve(`🍀 Success at attempt ${count}`)
-    })
-}
+//         resolve(`🍀 Success at attempt ${count}`)
+//     })
+// }
 
 
-retry(flakyFunction, 5, 1000)
-    .then(console.log)
-    .catch(console.log)
+// retry(flakyFunction, 5, 1000)
+//     .then(console.log)
+//     .catch(console.log)
