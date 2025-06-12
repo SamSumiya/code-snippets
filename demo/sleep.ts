@@ -1,4 +1,4 @@
-import { sleep } from "../async/sleep";
+import { sleep } from "../async/sleep/sleep";
 
 
 function runDemo1(ms: number): Promise<{result: string, elapse: number}> {
