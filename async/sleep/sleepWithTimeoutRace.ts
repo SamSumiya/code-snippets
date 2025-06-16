@@ -15,6 +15,9 @@ sleepWithTimeoutRace(102, 101)
 
 
 /* 
+
+
+
 If sleep() and the timeout don’t run at exactly the same time, how does Promise.race() know to reject first?
 
 both timers are started immediately and independently - almost within the same JS tick - and JS even loop evexutes whichever finishes first
