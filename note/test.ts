@@ -9,6 +9,25 @@ function sleep(delayMS: number): Promise<void> {
     })    
 }
 
+function sleepWithTimeoutRace(sleepMS: number, timeoutMS: number): Promise<string> {
+    let sleepTimeId: NodeJS.Timeout; 
+    let timeoutId: NodeJS.Timeout; 
+
+    const sleepPromise = new Promise<string>((resolve) => {
+            sleepTimeId = setTimeout(() => {
+                clearTimeout(timeoutId)
+                resolve('success')
+            }, sleepMS)
+        }) 
+    const rejectPromise = new Promise<string>((_, reject) => {
+            timeoutId = setTimeout(() => {
+                clearTimeout(sleepTimeId)
+                reject(new Error('fail'))
+            }, timeoutMS)
+        })
+
+    return Promise.race([sleepPromise, rejectPromise])
+}
 
 
 function sleepWithAsyncFnPromise(sleepMS: number, timeoutMS: number) {
