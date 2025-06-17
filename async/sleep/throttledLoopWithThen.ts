@@ -11,7 +11,6 @@ function sleepThen(ms: number): Promise<void> {
     })
 }
 
-
 function throttledLoopWithThen(items: string[]): Promise<string> {
     let chain: Promise<string> = Promise.resolve('') 
 
