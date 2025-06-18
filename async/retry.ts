@@ -1,4 +1,4 @@
-export async function retry<T>(fn: () => Promise<T>, retries: number, delayMS: number): Promise<T> {
+export async function retryWithPromise<T>(fn: () => Promise<T>, retries: number, delayMS: number): Promise<T> {
 
     return new Promise(( resolve, reject ) => {
         const attempt = (remainingRetries: number) => {
@@ -17,6 +17,19 @@ export async function retry<T>(fn: () => Promise<T>, retries: number, delayMS: n
         attempt(retries)
     })
 }
+
+
+
+async function retry2<T>(fn: () => Promise<T>, retries = 3): Promise<T> {
+  return fn().catch(async (err) => {
+    if (retries <= 0) throw new Error('failed…');
+
+    await new Promise((res) => setTimeout(res, 500));
+
+    return retry2(fn, retries - 1);
+  });
+}
+
 
 // let count = 0 
 
